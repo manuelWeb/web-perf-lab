@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "lint:commit": "commitlint --edit"
   },
   "dependencies": {
     "next": "16.4.0",
@@ -14,12 +15,16 @@
     "react-dom": "19.3.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "@tailwindcss/turbopack": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.4.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.2",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
