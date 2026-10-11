@@ -1,4 +1,4 @@
-import { ProductGrid } from "@/components/retail/product-grid";
+import { FilterableCatalogue } from "@/components/retail/filterable-catalogue";
 import {
   catalogueProducts,
   formatPrice,
@@ -56,7 +56,10 @@ export default function CataloguePage() {
           </div>
           <p className="text-sm text-zinc-600">{categories.join(" / ")}</p>
         </div>
-        <ProductGrid products={catalogueProducts} />
+        <FilterableCatalogue
+          categories={categories}
+          products={catalogueProducts}
+        />
       </section>
     </main>
   );
