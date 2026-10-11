@@ -78,7 +78,14 @@ function MetricCard({ metric }: { metric: PerformanceMetric }) {
             {metric.fullName}
           </h3>
         </div>
-        <span className="w-fit rounded-md border border-zinc-200 bg-stone-50 px-3 py-1 text-xs font-semibold text-zinc-700">
+        <span
+          className={`w-fit rounded-md border px-3 py-1 text-xs font-semibold ${
+            metric.hasExperimentRoutes
+              ? "border-teal-200 bg-teal-50 text-teal-800"
+              : "border-amber-200 bg-amber-50 text-amber-800"
+          }`}
+        >
+          {metric.hasExperimentRoutes ? "Disponible" : "À venir"} ·{" "}
           {metric.status}
         </span>
       </div>
@@ -104,13 +111,23 @@ function MetricCard({ metric }: { metric: PerformanceMetric }) {
         </p>
         <div className="flex flex-col gap-2 sm:flex-row">
           <Link
-            className="inline-flex h-10 items-center justify-center rounded-md border border-zinc-300 px-3 text-sm font-semibold text-zinc-800 transition-colors hover:bg-zinc-50"
+            aria-disabled={!metric.hasExperimentRoutes}
+            className={`inline-flex h-10 items-center justify-center rounded-md border border-zinc-300 px-3 text-sm font-semibold transition-colors ${
+              metric.hasExperimentRoutes
+                ? "text-zinc-800 hover:bg-zinc-50"
+                : "pointer-events-none text-zinc-400"
+            }`}
             href={`/${metric.id}/slow`}
           >
             Version slow
           </Link>
           <Link
-            className="inline-flex h-10 items-center justify-center rounded-md bg-zinc-950 px-3 text-sm font-semibold text-white transition-colors hover:bg-zinc-800"
+            aria-disabled={!metric.hasExperimentRoutes}
+            className={`inline-flex h-10 items-center justify-center rounded-md px-3 text-sm font-semibold transition-colors ${
+              metric.hasExperimentRoutes
+                ? "bg-zinc-950 text-white hover:bg-zinc-800"
+                : "pointer-events-none bg-zinc-200 text-zinc-400"
+            }`}
             href={`/${metric.id}/optimized`}
           >
             Version optimized

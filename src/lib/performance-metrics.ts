@@ -5,6 +5,7 @@ export type PerformanceMetric = {
   status: "Core Web Vital" | "Lighthouse" | "Diagnostic";
   scoreWeight: string;
   description: string;
+  hasExperimentRoutes: boolean;
   seoImpact: string;
   tools: readonly string[];
 };
@@ -18,6 +19,7 @@ export const performanceMetrics = [
     scoreWeight: "Pas de poids direct dans le score Lighthouse.",
     description:
       "Temps entre la requete navigateur et le premier octet de reponse serveur. Il aide a comprendre le cout serveur, reseau, cache et edge.",
+    hasExperimentRoutes: false,
     seoImpact:
       "Impact surtout indirect: un mauvais TTFB retarde souvent FCP et LCP.",
     tools: ["Chrome DevTools", "WebPageTest", "Datadog RUM"],
@@ -30,6 +32,7 @@ export const performanceMetrics = [
     scoreWeight: "10% du score Performance Lighthouse.",
     description:
       "Moment ou le premier contenu visible apparait: texte, image, SVG ou canvas non vide.",
+    hasExperimentRoutes: false,
     seoImpact:
       "Pas un Core Web Vital, mais un FCP lent signale souvent un rendu initial trop tardif.",
     tools: ["Lighthouse", "Chrome DevTools", "PageSpeed Insights"],
@@ -42,6 +45,7 @@ export const performanceMetrics = [
     scoreWeight: "25% du score Performance Lighthouse.",
     description:
       "Temps necessaire pour afficher le plus grand element de contenu visible dans le viewport.",
+    hasExperimentRoutes: true,
     seoImpact:
       "Fait partie des Core Web Vitals utilises comme signal d'experience de page.",
     tools: ["PageSpeed Insights", "Chrome DevTools", "Datadog RUM"],
@@ -54,6 +58,7 @@ export const performanceMetrics = [
     scoreWeight: "25% du score Performance Lighthouse.",
     description:
       "Mesure les decalages visuels inattendus pendant la vie de la page.",
+    hasExperimentRoutes: false,
     seoImpact:
       "Fait partie des Core Web Vitals: il aide a qualifier la stabilite percue.",
     tools: ["Lighthouse", "Chrome DevTools", "CrUX"],
@@ -67,6 +72,7 @@ export const performanceMetrics = [
       "Pas de poids direct dans Lighthouse; TBT sert souvent d'indicateur lab.",
     description:
       "Evalue la latence globale des interactions utilisateur, pas seulement la premiere interaction.",
+    hasExperimentRoutes: false,
     seoImpact:
       "Core Web Vital depuis mars 2024: utile pour juger la reactivite reelle.",
     tools: ["Chrome DevTools", "Web Vitals extension", "Datadog RUM"],
@@ -79,6 +85,7 @@ export const performanceMetrics = [
     scoreWeight: "30% du score Performance Lighthouse.",
     description:
       "Somme des periodes ou le thread principal reste bloque assez longtemps pour retarder les interactions.",
+    hasExperimentRoutes: false,
     seoImpact:
       "Pas un signal SEO direct, mais souvent correle aux problemes d'INP.",
     tools: ["Lighthouse", "Chrome DevTools Performance", "WebPageTest"],
@@ -91,6 +98,7 @@ export const performanceMetrics = [
     scoreWeight: "10% du score Performance Lighthouse.",
     description:
       "Resume la vitesse a laquelle le contenu visible se remplit pendant le chargement.",
+    hasExperimentRoutes: false,
     seoImpact:
       "Indicateur lab utile pour diagnostiquer le ressenti visuel, sans statut Core Web Vital.",
     tools: ["Lighthouse", "WebPageTest"],
