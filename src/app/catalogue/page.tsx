@@ -1,3 +1,4 @@
+import { CatalogueIndicatorsDialog } from "@/components/retail/catalogue-indicators-dialog";
 import { FilterableCatalogue } from "@/components/retail/filterable-catalogue";
 import {
   catalogueProducts,
@@ -13,11 +14,20 @@ export default function CataloguePage() {
   const prices = catalogueProducts.map((product) => product.priceInCents);
   const lowestPrice = Math.min(...prices);
   const highestPrice = Math.max(...prices);
+  const indicators = [
+    { label: "Products", value: catalogueProducts.length },
+    { label: "Available", value: availableCount },
+    { label: "Categories", value: categories.length },
+    {
+      label: "Price range",
+      value: `${formatPrice(lowestPrice)} - ${formatPrice(highestPrice)}`,
+    },
+  ];
 
   return (
     <main className="min-h-screen bg-stone-50 text-zinc-950">
       <section className="border-b border-zinc-200 bg-white">
-        <div className="mx-auto flex w-full max-w-6xl flex-col gap-8 px-6 py-12 sm:px-8 lg:px-10">
+        <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-6 py-12 sm:px-8 lg:px-10">
           <div className="max-w-3xl">
             <p className="text-sm font-semibold uppercase tracking-wide text-teal-700">
               Catalogue
@@ -32,15 +42,7 @@ export default function CataloguePage() {
             </p>
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            <Metric label="Products" value={catalogueProducts.length} />
-            <Metric label="Available" value={availableCount} />
-            <Metric label="Categories" value={categories.length} />
-            <Metric
-              label="Price range"
-              value={`${formatPrice(lowestPrice)} - ${formatPrice(highestPrice)}`}
-            />
-          </div>
+          <CatalogueIndicatorsDialog indicators={indicators} />
         </div>
       </section>
 
@@ -62,19 +64,5 @@ export default function CataloguePage() {
         />
       </section>
     </main>
-  );
-}
-
-type MetricProps = {
-  label: string;
-  value: number | string;
-};
-
-function Metric({ label, value }: MetricProps) {
-  return (
-    <div className="rounded-md border border-zinc-200 bg-stone-50 p-4">
-      <p className="text-sm text-zinc-600">{label}</p>
-      <p className="mt-2 text-2xl font-semibold text-zinc-950">{value}</p>
-    </div>
   );
 }
