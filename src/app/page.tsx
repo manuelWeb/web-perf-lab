@@ -1,9 +1,122 @@
+import Link from "next/link";
+import {
+  performanceMetrics,
+  type PerformanceMetric,
+} from "@/lib/performance-metrics";
+
 export default function Home() {
   return (
-    <main className="flex min-h-screen items-center justify-center bg-stone-50 px-6 text-zinc-950">
-      <h1 className="text-center text-4xl font-semibold tracking-normal sm:text-5xl">
-        Web Performance Lab
-      </h1>
+    <main className="min-h-screen bg-stone-50 text-zinc-950">
+      <section className="border-b border-zinc-200 bg-white">
+        <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-6 py-12 sm:px-8 lg:px-10">
+          <div className="max-w-3xl">
+            <p className="text-sm font-semibold uppercase tracking-wide text-teal-700">
+              Portfolio performance
+            </p>
+            <h1 className="mt-3 text-4xl font-semibold tracking-normal sm:text-5xl">
+              Web Performance Lab
+            </h1>
+            <p className="mt-5 max-w-2xl text-base leading-7 text-zinc-700">
+              Un laboratoire Next.js et React pour comprendre, reproduire,
+              mesurer puis corriger les principaux problemes de performance
+              web. Chaque experience suivra une logique bad to good: une page
+              lente, une page optimisee, et une explication mesurable.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <Link
+              className="inline-flex h-11 w-fit items-center justify-center rounded-md bg-zinc-950 px-4 text-sm font-semibold text-white transition-colors hover:bg-zinc-800"
+              href="/catalogue"
+            >
+              Ouvrir le catalogue
+            </Link>
+            <a
+              className="inline-flex h-11 w-fit items-center justify-center rounded-md border border-zinc-300 px-4 text-sm font-semibold text-zinc-800 transition-colors hover:bg-zinc-50"
+              href="https://web.dev/articles/vitals"
+              rel="noreferrer"
+              target="_blank"
+            >
+              Reference Core Web Vitals
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto w-full max-w-6xl px-6 py-10 sm:px-8 lg:px-10">
+        <div className="mb-6 max-w-3xl">
+          <h2 className="text-2xl font-semibold tracking-normal">
+            Metriques a explorer
+          </h2>
+          <p className="mt-2 text-sm leading-6 text-zinc-600">
+            Les Core Web Vitals forment le socle de l&apos;experience utilisateur
+            mesuree sur le terrain. Lighthouse ajoute des metriques lab utiles
+            pour diagnostiquer les causes avant de construire les pages
+            slow/optimized.
+          </p>
+        </div>
+
+        <div className="grid gap-4 lg:grid-cols-2">
+          {performanceMetrics.map((metric) => (
+            <MetricCard key={metric.id} metric={metric} />
+          ))}
+        </div>
+      </section>
     </main>
+  );
+}
+
+function MetricCard({ metric }: { metric: PerformanceMetric }) {
+  return (
+    <article className="flex h-full flex-col gap-5 rounded-md border border-zinc-200 bg-white p-5">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <p className="text-sm font-semibold text-teal-700">
+            <abbr title={metric.fullName}>{metric.name}</abbr>
+          </p>
+          <h3 className="mt-1 text-xl font-semibold tracking-normal">
+            {metric.fullName}
+          </h3>
+        </div>
+        <span className="w-fit rounded-md border border-zinc-200 bg-stone-50 px-3 py-1 text-xs font-semibold text-zinc-700">
+          {metric.status}
+        </span>
+      </div>
+
+      <p className="text-sm leading-6 text-zinc-700">{metric.description}</p>
+
+      <dl className="grid gap-3 text-sm sm:grid-cols-2">
+        <div>
+          <dt className="font-semibold text-zinc-950">Poids</dt>
+          <dd className="mt-1 leading-6 text-zinc-600">
+            {metric.scoreWeight}
+          </dd>
+        </div>
+        <div>
+          <dt className="font-semibold text-zinc-950">SEO</dt>
+          <dd className="mt-1 leading-6 text-zinc-600">{metric.seoImpact}</dd>
+        </div>
+      </dl>
+
+      <div className="mt-auto flex flex-col gap-4">
+        <p className="text-xs font-semibold uppercase tracking-wide text-zinc-500">
+          Outils: {metric.tools.join(" / ")}
+        </p>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <Link
+            className="inline-flex h-10 items-center justify-center rounded-md border border-zinc-300 px-3 text-sm font-semibold text-zinc-800 transition-colors hover:bg-zinc-50"
+            href={`/${metric.id}/slow`}
+          >
+            Version slow
+          </Link>
+          <Link
+            className="inline-flex h-10 items-center justify-center rounded-md bg-zinc-950 px-3 text-sm font-semibold text-white transition-colors hover:bg-zinc-800"
+            href={`/${metric.id}/optimized`}
+          >
+            Version optimized
+          </Link>
+        </div>
+      </div>
+    </article>
   );
 }
