@@ -9,6 +9,16 @@ const nextConfig: NextConfig = {
         pathname: "/product-images/**",
         search: "",
       },
+      {
+        protocol: "https",
+        hostname: "dummyjson.com",
+        pathname: "/image/**",
+      },
+      {
+        protocol: "https",
+        hostname: "picsum.photos",
+        pathname: "/**",
+      },
     ],
   },
   turbopack: {

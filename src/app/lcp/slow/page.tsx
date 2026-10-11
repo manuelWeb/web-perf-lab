@@ -1,48 +1,45 @@
 import Image from "next/image";
 import Link from "next/link";
-import { catalogueProducts, formatPrice } from "@/lib/catalogue";
-import type { Product } from "@/lib/products";
-
-const LCP_SLOW_PRODUCT_ID = "11";
-
-function getSlowPageProduct(): Product {
-  const product = catalogueProducts.find(
-    (product) => product.id === LCP_SLOW_PRODUCT_ID,
-  );
-
-  if (!product) {
-    throw new Error(`Missing LCP slow page product: ${LCP_SLOW_PRODUCT_ID}`);
-  }
-
-  return product;
-}
+import { formatPrice } from "@/lib/catalogue";
+import {
+  getLcpExperimentProduct,
+  LCP_EXPERIMENT_IMAGE_URL,
+} from "@/lib/lcp-lab";
 
 export default function SlowLcpPage() {
-  const product = getSlowPageProduct();
+  const product = getLcpExperimentProduct();
 
   return (
     <main className="min-h-screen bg-stone-50 text-zinc-950">
       <section className="border-b border-zinc-200 bg-white">
         <div className="mx-auto grid w-full max-w-6xl gap-8 px-6 py-10 sm:px-8 lg:grid-cols-[0.95fr_1.05fr] lg:px-10">
           <div className="flex flex-col justify-center">
-            <Link
-              className="text-sm font-semibold text-teal-700 transition-colors hover:text-teal-900"
-              href="/"
-            >
-              Retour aux métriques
-            </Link>
+            <div className="flex flex-wrap gap-4 text-sm font-semibold">
+              <Link
+                className="text-teal-700 transition-colors hover:text-teal-900"
+                href="/"
+              >
+                Retour aux métriques
+              </Link>
+              <Link
+                className="text-zinc-700 transition-colors hover:text-zinc-950"
+                href="/lcp/optimized"
+              >
+                Voir la version optimisée
+              </Link>
+            </div>
             <p className="mt-8 text-sm font-semibold uppercase tracking-wide text-rose-700">
               LCP slow
             </p>
             <h1 className="mt-3 text-4xl font-semibold tracking-normal sm:text-5xl">
-              Image principale sans priorité explicite
+              Image principale non optimisée
             </h1>
             <p className="mt-5 max-w-xl text-base leading-7 text-zinc-700">
-              Cette page place une grande image produit au-dessus de la ligne
-              de flottaison, c’est-à-dire visible dans le viewport sans
-              défilement, mais laisse le navigateur la découvrir sans signal de
-              priorité adapté. C’est un bon point de départ pour observer un
-              candidat LCP chargé trop tard.
+              Cette page place une grande image produit au-dessus de la ligne de
+              flottaison, c’est-à-dire visible dans le viewport sans défilement,
+              mais désactive l’optimisation de Next.js. Le navigateur charge
+              donc l’image distante brute au lieu d’une version redimensionnée
+              pour sa taille d’affichage.
             </p>
           </div>
 
@@ -52,8 +49,8 @@ export default function SlowLcpPage() {
                 alt={product.name}
                 className="object-cover"
                 fill
-                sizes="(max-width: 1024px) 100vw, 50vw"
-                src={product.imageUrl}
+                unoptimized
+                src={LCP_EXPERIMENT_IMAGE_URL}
               />
             </div>
             <div className="flex items-start justify-between gap-4 p-5">
@@ -77,12 +74,12 @@ export default function SlowLcpPage() {
           body="Le LCP mesure le temps nécessaire pour afficher le plus grand élément de contenu visible. Ici, l'image produit est volontairement le candidat principal."
         />
         <ExplainerCard
-          title="Pourquoi c'est lent"
-          body="L'image visible dans le viewport sans défilement n'a pas de signal indiquant qu'elle est critique. Le navigateur peut donc la prioriser trop tard par rapport au rendu initial."
+          title="À éviter"
+          body="L'image visible dans le viewport sans défilement utilise unoptimized. Next.js ne génère donc pas de version redimensionnée et le navigateur charge l'image distante brute."
         />
         <ExplainerCard
-          title="Comment l'analyser"
-          body="Dans Chrome DevTools ou Lighthouse, repère l'élément LCP, sa requête réseau, son début de chargement et le temps perdu avant réception de l'image."
+          title="À vérifier"
+          body="Dans Chrome DevTools ou Lighthouse, repère l'élément LCP, sa requête réseau et le poids transféré. Le problème attendu est une image brute trop coûteuse pour sa taille réelle d'affichage."
         />
       </section>
     </main>
