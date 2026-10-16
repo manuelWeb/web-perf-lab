@@ -67,6 +67,11 @@ export default function Home() {
 }
 
 function MetricCard({ metric }: { metric: PerformanceMetric }) {
+  const hasSlowRoute = metric.experimentRoutes.slow;
+  const hasOptimizedRoute = metric.experimentRoutes.optimized;
+  const hasAnyExperimentRoute = hasSlowRoute || hasOptimizedRoute;
+  const isCompleteExperiment = hasSlowRoute && hasOptimizedRoute;
+
   return (
     <article className="flex h-full flex-col gap-5 rounded-md border border-zinc-200 bg-white p-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -80,17 +85,39 @@ function MetricCard({ metric }: { metric: PerformanceMetric }) {
         </div>
         <span
           className={`w-fit rounded-md border px-3 py-1 text-xs font-semibold ${
-            metric.hasExperimentRoutes
+            isCompleteExperiment
               ? "border-teal-200 bg-teal-50 text-teal-800"
+              : hasAnyExperimentRoute
+                ? "border-sky-200 bg-sky-50 text-sky-800"
               : "border-amber-200 bg-amber-50 text-amber-800"
           }`}
         >
-          {metric.hasExperimentRoutes ? "Disponible" : "À venir"} ·{" "}
-          {metric.status}
+          {isCompleteExperiment
+            ? "Disponible"
+            : hasAnyExperimentRoute
+              ? "En cours"
+              : "À venir"}{" "}
+          · {metric.status}
         </span>
       </div>
 
       <p className="text-sm leading-6 text-zinc-700">{metric.description}</p>
+
+      {metric.hasAnalysisGuide ? (
+        <Link
+          className="w-fit text-sm font-semibold text-teal-700 underline decoration-teal-300 underline-offset-4 transition-colors hover:text-teal-900"
+          href={`/${metric.id}/analysis`}
+        >
+          Guide d’analyse {metric.name}
+        </Link>
+      ) : (
+        <p
+          aria-disabled="true"
+          className="w-fit text-sm font-semibold text-zinc-400"
+        >
+          Guide d’analyse {metric.name} à venir
+        </p>
+      )}
 
       <dl className="grid gap-3 text-sm sm:grid-cols-2">
         <div>
@@ -111,9 +138,9 @@ function MetricCard({ metric }: { metric: PerformanceMetric }) {
         </p>
         <div className="flex flex-col gap-2 sm:flex-row">
           <Link
-            aria-disabled={!metric.hasExperimentRoutes}
+            aria-disabled={!hasSlowRoute}
             className={`inline-flex h-10 items-center justify-center rounded-md border border-zinc-300 px-3 text-sm font-semibold transition-colors ${
-              metric.hasExperimentRoutes
+              hasSlowRoute
                 ? "text-zinc-800 hover:bg-zinc-50"
                 : "pointer-events-none text-zinc-400"
             }`}
@@ -122,9 +149,9 @@ function MetricCard({ metric }: { metric: PerformanceMetric }) {
             Version slow
           </Link>
           <Link
-            aria-disabled={!metric.hasExperimentRoutes}
+            aria-disabled={!hasOptimizedRoute}
             className={`inline-flex h-10 items-center justify-center rounded-md px-3 text-sm font-semibold transition-colors ${
-              metric.hasExperimentRoutes
+              hasOptimizedRoute
                 ? "bg-zinc-950 text-white hover:bg-zinc-800"
                 : "pointer-events-none bg-zinc-200 text-zinc-400"
             }`}
