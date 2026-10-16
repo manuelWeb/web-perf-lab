@@ -119,6 +119,12 @@ export default function SlowInpPage() {
             >
               Retour aux métriques
             </Link>
+            <Link
+              className="mt-3 text-sm font-semibold text-zinc-700 transition-colors hover:text-zinc-950"
+              href="/inp/optimized"
+            >
+              Voir la version optimisée
+            </Link>
             <p className="mt-8 text-sm font-semibold uppercase tracking-wide text-rose-700">
               INP slow
             </p>
