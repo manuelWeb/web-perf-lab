@@ -1,77 +1,96 @@
 "use client";
 
-import { useRef, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   createSimulatedAccount,
-  getAccountSnapshot,
-  getServerAccountSnapshot,
-  parseSimulatedAccount,
-  setSimulatedAccountConnection,
-  subscribeToAccountChanges,
-} from "@/lib/simulated-account";
+  disconnectSimulatedAccount,
+  reconnectSimulatedAccount,
+} from "@/app/actions/simulated-account";
+import type { SimulatedAccount } from "@/lib/simulated-account";
+import {
+  fetchSimulatedAccount,
+  SIMULATED_ACCOUNT_CHANGED_EVENT,
+} from "@/lib/fetch-simulated-account";
 
 export function SimulatedAccountControl() {
-  const snapshot = useSyncExternalStore(
-    subscribeToAccountChanges,
-    getAccountSnapshot,
-    getServerAccountSnapshot,
-  );
-  const account = parseSimulatedAccount(snapshot);
+  const [account, setAccount] = useState<SimulatedAccount | null>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const router = useRouter();
 
-  function handleLogin() {
-    if (account) {
-      setSimulatedAccountConnection(account, true);
-      return;
-    }
-
-    dialogRef.current?.showModal();
+  async function refreshAccount() {
+    setAccount(await fetchSimulatedAccount());
+    window.dispatchEvent(new Event(SIMULATED_ACCOUNT_CHANGED_EVENT));
+    router.refresh();
   }
 
-  function handleFirstLogin(formData: FormData) {
-    const civility = formData.get("civility");
-    const firstName = formData.get("firstName");
+  useEffect(() => {
+    const controller = new AbortController();
+    void fetchSimulatedAccount(controller.signal).then(setAccount).catch(() => {});
+    return () => controller.abort();
+  }, []);
 
-    if (
-      (civility === "Mme" || civility === "M.") &&
-      typeof firstName === "string" &&
-      firstName.trim()
-    ) {
-      createSimulatedAccount(civility, firstName);
+  async function handleFirstLogin(formData: FormData) {
+    if (await createSimulatedAccount(formData)) {
       dialogRef.current?.close();
+      await refreshAccount();
     }
+  }
+
+  async function handleReconnect() {
+    await reconnectSimulatedAccount();
+    await refreshAccount();
+  }
+
+  async function handleDisconnect() {
+    await disconnectSimulatedAccount();
+    await refreshAccount();
+  }
+
+  if (account?.isConnected) {
+    return (
+      <div className="flex h-10 w-32 shrink-0 items-center justify-end gap-1">
+        <span
+          aria-hidden="true"
+          className="flex size-8 shrink-0 items-center justify-center rounded-full bg-zinc-900 text-sm font-semibold text-white"
+        >
+          {account.firstName.charAt(0).toLocaleUpperCase("fr")}
+        </span>
+        <form action={handleDisconnect}>
+          <button
+            aria-label="Se déconnecter du compte simulé"
+            className="h-10 rounded-md border border-zinc-300 px-1.5 text-[10px] font-semibold text-zinc-800 transition-colors hover:bg-zinc-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700"
+            type="submit"
+          >
+            Déconnexion
+          </button>
+        </form>
+      </div>
+    );
+  }
+
+  if (account) {
+    return (
+      <form action={handleReconnect}>
+        <button
+          className="h-10 w-32 rounded-md border border-zinc-300 px-3 text-sm font-semibold text-zinc-800 transition-colors hover:bg-zinc-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700"
+          type="submit"
+        >
+          Connexion
+        </button>
+      </form>
+    );
   }
 
   return (
     <>
-      <div className="flex h-10 w-32 shrink-0 items-center justify-end gap-2">
-        {account?.isConnected ? (
-          <>
-            <span
-              aria-hidden="true"
-              className="flex size-10 shrink-0 items-center justify-center rounded-full bg-zinc-900 text-sm font-semibold text-white"
-            >
-              {account.firstName.charAt(0).toLocaleUpperCase("fr")}
-            </span>
-            <button
-              aria-label="Se déconnecter du compte simulé"
-              className="h-10 rounded-md border border-zinc-300 px-2 text-xs font-semibold text-zinc-800 transition-colors hover:bg-zinc-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700"
-              onClick={() => setSimulatedAccountConnection(account, false)}
-              type="button"
-            >
-              Déconnexion
-            </button>
-          </>
-        ) : (
-          <button
-            className="h-10 w-full rounded-md border border-zinc-300 px-3 text-sm font-semibold text-zinc-800 transition-colors hover:bg-zinc-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700"
-            onClick={handleLogin}
-            type="button"
-          >
-            Connexion
-          </button>
-        )}
-      </div>
+      <button
+        className="h-10 w-32 rounded-md border border-zinc-300 px-3 text-sm font-semibold text-zinc-800 transition-colors hover:bg-zinc-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-700"
+        onClick={() => dialogRef.current?.showModal()}
+        type="button"
+      >
+        Connexion
+      </button>
 
       <dialog
         aria-labelledby="simulated-login-title"
@@ -84,7 +103,7 @@ export function SimulatedAccountControl() {
               Connexion de démonstration
             </h2>
             <p className="text-sm text-zinc-600">
-              Ces informations sont conservées dans ce navigateur.
+              Ces informations sont conservées dans un cookie de démonstration.
             </p>
           </div>
 

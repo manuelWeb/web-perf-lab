@@ -5,32 +5,16 @@ export type SimulatedAccount = {
   lastLoginAt: string;
 };
 
-const ACCOUNT_STORAGE_KEY = "web-perf-lab:simulated-account:v2";
-const ACCOUNT_CHANGE_EVENT = "web-perf-lab:account-change";
+export type PublicSimulatedAccount = Pick<
+  SimulatedAccount,
+  "civility" | "firstName" | "lastLoginAt"
+>;
 
-export function subscribeToAccountChanges(onChange: () => void) {
-  window.addEventListener("storage", onChange);
-  window.addEventListener(ACCOUNT_CHANGE_EVENT, onChange);
-
-  return () => {
-    window.removeEventListener("storage", onChange);
-    window.removeEventListener(ACCOUNT_CHANGE_EVENT, onChange);
-  };
-}
-
-export function getAccountSnapshot() {
-  return window.localStorage.getItem(ACCOUNT_STORAGE_KEY);
-}
-
-export function getServerAccountSnapshot() {
-  return null;
-}
-
-export function parseSimulatedAccount(snapshot: string | null) {
-  if (!snapshot) return null;
+export function parseSimulatedAccount(value: string | undefined) {
+  if (!value) return null;
 
   try {
-    const account: unknown = JSON.parse(snapshot);
+    const account: unknown = JSON.parse(value);
     if (
       typeof account === "object" &&
       account !== null &&
@@ -38,10 +22,13 @@ export function parseSimulatedAccount(snapshot: string | null) {
       (account.civility === "Mme" || account.civility === "M.") &&
       "firstName" in account &&
       typeof account.firstName === "string" &&
+      account.firstName.trim().length > 0 &&
+      account.firstName.length <= 40 &&
       "isConnected" in account &&
       typeof account.isConnected === "boolean" &&
       "lastLoginAt" in account &&
-      typeof account.lastLoginAt === "string"
+      typeof account.lastLoginAt === "string" &&
+      Number.isFinite(Date.parse(account.lastLoginAt))
     ) {
       return account as SimulatedAccount;
     }
@@ -50,29 +37,4 @@ export function parseSimulatedAccount(snapshot: string | null) {
   }
 
   return null;
-}
-
-function saveAccount(account: SimulatedAccount) {
-  window.localStorage.setItem(ACCOUNT_STORAGE_KEY, JSON.stringify(account));
-  window.dispatchEvent(new Event(ACCOUNT_CHANGE_EVENT));
-}
-
-export function createSimulatedAccount(civility: SimulatedAccount["civility"], firstName: string) {
-  saveAccount({
-    civility,
-    firstName: firstName.trim(),
-    isConnected: true,
-    lastLoginAt: new Date().toISOString(),
-  });
-}
-
-export function setSimulatedAccountConnection(
-  account: SimulatedAccount,
-  isConnected: boolean,
-) {
-  saveAccount({
-    ...account,
-    isConnected,
-    lastLoginAt: isConnected ? new Date().toISOString() : account.lastLoginAt,
-  });
 }
