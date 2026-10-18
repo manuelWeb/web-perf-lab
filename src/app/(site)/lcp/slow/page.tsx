@@ -6,11 +6,11 @@ import {
   LCP_EXPERIMENT_IMAGE_URL,
 } from "@/lib/lcp-lab";
 
-export default function OptimizedLcpPage() {
+export default function SlowLcpPage() {
   const product = getLcpExperimentProduct();
 
   return (
-    <main className="min-h-screen bg-stone-50 text-zinc-950">
+    <main className="flex-1 bg-stone-50 text-zinc-950">
       <section className="border-b border-zinc-200 bg-white">
         <div className="mx-auto grid w-full max-w-6xl gap-8 px-6 py-10 sm:px-8 lg:grid-cols-[0.95fr_1.05fr] lg:px-10">
           <div className="flex flex-col justify-center">
@@ -23,21 +23,23 @@ export default function OptimizedLcpPage() {
               </Link>
               <Link
                 className="text-zinc-700 transition-colors hover:text-zinc-950"
-                href="/lcp/slow"
+                href="/lcp/optimized"
               >
-                Voir la version slow
+                Voir la version optimisée
               </Link>
             </div>
-            <p className="mt-8 text-sm font-semibold uppercase tracking-wide text-teal-700">
-              LCP optimized
+            <p className="mt-8 text-sm font-semibold uppercase tracking-wide text-rose-700">
+              LCP slow
             </p>
             <h1 className="mt-3 text-4xl font-semibold tracking-normal sm:text-5xl">
-              Image principale priorisée
+              Image principale non optimisée
             </h1>
             <p className="mt-5 max-w-xl text-base leading-7 text-zinc-700">
-              Cette page affiche le même produit que la version slow, mais
-              indique explicitement au navigateur que l’image visible dans le
-              viewport sans défilement est critique pour le rendu initial.
+              Cette page place une grande image produit au-dessus de la ligne de
+              flottaison, c’est-à-dire visible dans le viewport sans défilement,
+              mais désactive l’optimisation de Next.js. Le navigateur charge
+              donc l’image distante brute au lieu d’une version redimensionnée
+              pour sa taille d’affichage.
             </p>
           </div>
 
@@ -46,10 +48,8 @@ export default function OptimizedLcpPage() {
               <Image
                 alt={product.name}
                 className="object-cover"
-                fetchPriority="high"
                 fill
-                loading="eager"
-                sizes="(max-width: 1024px) 100vw, 544px"
+                unoptimized
                 src={LCP_EXPERIMENT_IMAGE_URL}
               />
             </div>
@@ -70,16 +70,16 @@ export default function OptimizedLcpPage() {
 
       <section className="mx-auto grid w-full max-w-6xl gap-4 px-6 py-10 sm:px-8 lg:grid-cols-3 lg:px-10">
         <ExplainerCard
-          title="Ce qui change"
-          body="Le contenu reste identique à la version slow. La différence porte sur la priorité de l'image candidate au LCP."
+          title="Ce qui est mesuré"
+          body="Le LCP mesure le temps nécessaire pour afficher le plus grand élément de contenu visible. Ici, l'image produit est volontairement le candidat principal."
         />
         <ExplainerCard
-          title="À faire"
-          body="Laisser Next.js optimiser l'image, déclarer une valeur sizes fidèle à la taille d'affichage et prioriser l'image principale visible dans le viewport sans défilement."
+          title="À éviter"
+          body="L'image visible dans le viewport sans défilement utilise unoptimized. Next.js ne génère donc pas de version redimensionnée et le navigateur charge l'image distante brute."
         />
         <ExplainerCard
-          title="Comment le vérifier"
-          body="Dans Lighthouse ou Chrome DevTools, compare l'élément LCP, le poids transféré, la ressource choisie par Next.js et la waterfall réseau avec la version slow."
+          title="À vérifier"
+          body="Dans Chrome DevTools ou Lighthouse, repère l'élément LCP, sa requête réseau et le poids transféré. Le problème attendu est une image brute trop coûteuse pour sa taille réelle d'affichage."
         />
       </section>
     </main>

@@ -74,10 +74,10 @@ export const performanceMetrics = [
     scoreWeight: "25% du score Performance Lighthouse.",
     description:
       "Mesure les decalages visuels inattendus pendant la vie de la page.",
-    hasAnalysisGuide: false,
+    hasAnalysisGuide: true,
     experimentRoutes: {
-      optimized: false,
-      slow: false,
+      optimized: true,
+      slow: true,
     },
     seoImpact:
       "Fait partie des Core Web Vitals: il aide a qualifier la stabilite percue.",
