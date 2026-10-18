@@ -29,29 +29,28 @@ qu'aucun code non fusionné ne soit livré.
 
 1. Une PR vers `main` passe la CI et reçoit les validations requises.
 2. La fusion produit un `push` sur `main`.
-3. Le workflow se connecte en SSH au serveur `mini-forum` et exécute, dans
+3. Le workflow s'exécute sur un **runner GitHub Actions auto-hébergé**, installé
+   directement sur `mini-forum` (`~/actions-runners/web-perf-lab`, service
+   systemd `actions.runner.manuelWeb-web-perf-lab.miniforum-web-perf-lab`,
+   démarré au boot). Le job tourne donc localement et exécute, dans
    `/opt/apps/web-perf-lab` : `git fetch`, `git reset --hard origin/main`, puis
    `docker compose build && docker compose up -d --wait`.
 4. Le healthcheck du service Compose valide la livraison : si le conteneur ne
    devient jamais `healthy`, le job échoue et le signale.
 
-### Sécurité de la connexion
+### Pourquoi un runner auto-hébergé plutôt que du SSH
 
-Le workflow utilise une clé SSH dédiée (`DEPLOY_SSH_KEY`), distincte des clés
-personnelles, autorisée sur le serveur via une entrée `authorized_keys`
-restreinte par une **commande forcée** : la clé ne peut exécuter que la
-séquence de déploiement de ce projet, quelle que soit la commande envoyée par
-le client SSH (`no-pty`, `no-port-forwarding`, `no-X11-forwarding`,
-`no-agent-forwarding`). Une compromission du secret GitHub ne donne donc pas un
-accès shell complet au serveur.
+Mini-forum est derrière un routeur qui ne fait du port-forwarding que pour 80
+et 443 : le port 22 n'est pas joignable depuis l'extérieur, donc un
+`appleboy/ssh-action` lancé sur `ubuntu-latest` échoue (`i/o timeout`). Le
+runner auto-hébergé évite ce problème : il se connecte en sortant vers GitHub
+(polling), aucun port entrant à ouvrir, aucun secret SSH à gérer ni de clé à
+exposer. C'est aussi la solution la plus sûre pour un serveur à la maison.
 
-Secrets GitHub requis (Settings → Secrets and variables → Actions) :
-
-| Secret           | Valeur                                      |
-| ---------------- | -------------------------------------------- |
-| `DEPLOY_HOST`     | IP publique ou nom d'hôte de mini-forum.     |
-| `DEPLOY_USER`     | Utilisateur système (`manuel`).              |
-| `DEPLOY_SSH_KEY`  | Clé privée dédiée (jamais la clé personnelle). |
+Limite de cette approche : le runner tourne en permanence sur le serveur et
+exécute le job avec les droits de l'utilisateur système `manuel` — ne pas lui
+faire exécuter du code non fiable issu d'une PR externe (ce n'est pas un
+risque ici, le repo n'accepte que des PR internes).
 
 ### Protection de branche
 
