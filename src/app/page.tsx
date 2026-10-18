@@ -6,7 +6,7 @@ import {
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-stone-50 text-zinc-950">
+    <main className="flex-1 bg-stone-50 text-zinc-950">
       <section className="border-b border-zinc-200 bg-white">
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-6 py-12 sm:px-8 lg:px-10">
           <div className="max-w-3xl">
@@ -111,12 +111,13 @@ function MetricCard({ metric }: { metric: PerformanceMetric }) {
           Guide d’analyse {metric.name}
         </Link>
       ) : (
-        <p
-          aria-disabled="true"
-          className="w-fit text-sm font-semibold text-zinc-400"
+        <button
+          className="w-fit cursor-not-allowed text-left text-sm font-semibold text-zinc-400"
+          disabled
+          type="button"
         >
-          Guide d’analyse {metric.name} à venir
-        </p>
+          Guide d’analyse {metric.name}
+        </button>
       )}
 
       <dl className="grid gap-3 text-sm sm:grid-cols-2">

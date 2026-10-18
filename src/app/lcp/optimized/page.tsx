@@ -10,7 +10,7 @@ export default function OptimizedLcpPage() {
   const product = getLcpExperimentProduct();
 
   return (
-    <main className="min-h-screen bg-stone-50 text-zinc-950">
+    <main className="flex-1 bg-stone-50 text-zinc-950">
       <section className="border-b border-zinc-200 bg-white">
         <div className="mx-auto grid w-full max-w-6xl gap-8 px-6 py-10 sm:px-8 lg:grid-cols-[0.95fr_1.05fr] lg:px-10">
           <div className="flex flex-col justify-center">
