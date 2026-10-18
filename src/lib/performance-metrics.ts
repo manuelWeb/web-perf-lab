@@ -76,8 +76,8 @@ export const performanceMetrics = [
       "Mesure les decalages visuels inattendus pendant la vie de la page.",
     hasAnalysisGuide: true,
     experimentRoutes: {
-      optimized: false,
-      slow: false,
+      optimized: true,
+      slow: true,
     },
     seoImpact:
       "Fait partie des Core Web Vitals: il aide a qualifier la stabilite percue.",
