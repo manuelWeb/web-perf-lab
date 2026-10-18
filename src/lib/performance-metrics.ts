@@ -74,7 +74,7 @@ export const performanceMetrics = [
     scoreWeight: "25% du score Performance Lighthouse.",
     description:
       "Mesure les decalages visuels inattendus pendant la vie de la page.",
-    hasAnalysisGuide: false,
+    hasAnalysisGuide: true,
     experimentRoutes: {
       optimized: false,
       slow: false,
