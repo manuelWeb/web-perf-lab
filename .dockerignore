@@ -1,0 +1,12 @@
+node_modules
+.next
+.git
+.github
+.husky
+deploy
+docs
+*.log
+.env
+.env.*
+README.md
+AGENTS.md
