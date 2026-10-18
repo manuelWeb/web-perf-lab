@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { MetricNavigation } from "@/components/metric-navigation";
 import { MobileMetricMenu } from "@/components/mobile-metric-menu";
+import { SimulatedAccountControl } from "@/components/simulated-account-control";
 import { performanceMetrics } from "@/lib/performance-metrics";
 
 const metricNavigationItems = performanceMetrics.map(
@@ -20,7 +21,7 @@ const metricNavigationItems = performanceMetrics.map(
 export function SiteHeader() {
   return (
     <header className="border-b border-zinc-200 bg-white">
-      <div className="mx-auto flex min-h-16 w-full max-w-7xl items-center justify-between gap-5 px-5 sm:px-8 lg:px-10">
+      <div className="mx-auto flex min-h-16 w-full max-w-7xl items-center justify-between gap-2 px-4 sm:gap-5 sm:px-8 lg:px-10">
         <Link
           aria-label="Web Performance Lab, accueil"
           className="shrink-0 text-base font-bold text-zinc-950 sm:text-lg"
@@ -40,14 +41,8 @@ export function SiteHeader() {
           />
         </nav>
 
-        <div className="flex shrink-0 items-center gap-2">
-          <button
-            className="h-10 rounded-md border border-zinc-300 px-3 text-sm font-semibold text-zinc-400"
-            disabled
-            type="button"
-          >
-            Connexion
-          </button>
+        <div className="flex shrink-0 items-center gap-1 sm:gap-2">
+          <SimulatedAccountControl />
           <MobileMetricMenu items={metricNavigationItems} />
         </div>
       </div>
