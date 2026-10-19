@@ -9,7 +9,9 @@ import {
 import { WelcomeBannerView } from "@/components/welcome-banner-view";
 
 export function ClsWelcomeBanner() {
-  const [account, setAccount] = useState<SimulatedAccount | null>(null);
+  const [account, setAccount] = useState<SimulatedAccount | undefined | null>(
+    undefined,
+  );
 
   useEffect(() => {
     const controller = new AbortController();
@@ -33,7 +35,7 @@ export function ClsWelcomeBanner() {
     };
   }, []);
 
-  if (!account) return null;
+  if (account === undefined) return null;
 
   return <WelcomeBannerView account={account} />;
 }
