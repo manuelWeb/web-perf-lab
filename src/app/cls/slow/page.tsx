@@ -21,7 +21,7 @@ export default function ClsSlowPage() {
             >
               Guide d’analyse du CLS
             </Link>
-            <p className="mt-8 text-sm font-semibold uppercase tracking-wide text-teal-700">
+            <p className="mt-8 text-sm font-semibold uppercase tracking-wide text-rose-700">
               Expérience CLS · version lente
             </p>
             <h1 className="mt-3 max-w-3xl text-4xl font-semibold sm:text-5xl">

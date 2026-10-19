@@ -28,7 +28,7 @@ export default async function ClsOptimizedPage() {
             >
               Guide d’analyse du CLS
             </Link>
-            <p className="mt-8 text-sm font-semibold uppercase tracking-wide text-teal-700">
+            <p className="mt-8 text-sm font-semibold uppercase tracking-wide text-green-700">
               Expérience CLS · version optimisée
             </p>
             <h1 className="mt-3 max-w-3xl text-4xl font-semibold sm:text-5xl">
