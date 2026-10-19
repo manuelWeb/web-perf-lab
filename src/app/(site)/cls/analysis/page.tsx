@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { performanceMetrics } from "@/lib/performance-metrics";
 
 export const metadata: Metadata = {
   title: "Analyser le CLS | Web Performance Lab",
@@ -59,21 +60,20 @@ const resources = [
 ];
 
 export default function ClsAnalysisPage() {
+  const clsMetric = performanceMetrics.filter(
+    (metric) => metric.id === "cls",
+  )[0];
+  if (!clsMetric) {
+    throw new Error("CLS metric not found");
+  }
   return (
     <main className="flex-1 bg-stone-50 text-zinc-950">
       <section className="border-b border-zinc-200 bg-white">
         <div className="mx-auto flex w-full max-w-6xl flex-col px-6 py-10 sm:px-8 lg:px-10">
-          <Link
-            className="w-fit text-sm font-semibold text-teal-700 transition-colors hover:text-teal-900"
-            href="/"
-          >
-            Retour aux métriques
-          </Link>
-
           <p className="mt-8 text-sm font-semibold uppercase tracking-wide text-teal-700">
-            Méthode CLS
+            Métrique CLS
           </p>
-          <h1 className="mt-3 max-w-3xl text-4xl font-semibold tracking-normal sm:text-5xl">
+          <h1 className="mt-4 max-w-3xl text-4xl font-semibold tracking-normal sm:text-5xl">
             Diagnostiquer les décalages de mise en page
           </h1>
           <p className="mt-5 max-w-3xl text-base leading-7 text-zinc-700">
@@ -81,11 +81,36 @@ export default function ClsAnalysisPage() {
             <abbr title="Cumulative Layout Shift (décalage cumulatif de mise en page)">
               CLS
             </abbr>{" "}
-            mesure l’ampleur des déplacements visuels inattendus. Il n’a pas d’unité de
-            temps : sa valeur dépend de la surface déplacée et de la distance du
-            déplacement. L’objectif est de trouver ce qui a bougé, puis surtout
-            ce qui l’a fait bouger.
+            mesure l’ampleur des déplacements visuels inattendus. Il n’a pas
+            d’unité de temps : sa valeur dépend de la surface déplacée et de la
+            distance du déplacement. L’objectif est de trouver ce qui a bougé,
+            puis surtout ce qui l’a fait bouger.
           </p>
+
+          <div className="flex flex-col gap-2 sm:flex-row mt-4">
+            <Link
+              aria-disabled={!clsMetric.experimentRoutes.slow}
+              className={`inline-flex h-10 items-center justify-center rounded-md border border-zinc-300 px-3 text-sm font-semibold transition-colors ${
+                clsMetric.experimentRoutes.slow
+                  ? "text-zinc-800 hover:bg-zinc-50"
+                  : "pointer-events-none text-zinc-400"
+              }`}
+              href={`/${clsMetric.id}/slow`}
+            >
+              Version slow
+            </Link>
+            <Link
+              aria-disabled={!clsMetric.experimentRoutes.optimized}
+              className={`inline-flex h-10 items-center justify-center rounded-md px-3 text-sm font-semibold transition-colors ${
+                clsMetric.experimentRoutes.optimized
+                  ? "bg-zinc-950 text-white hover:bg-zinc-800"
+                  : "pointer-events-none bg-zinc-200 text-zinc-400"
+              }`}
+              href={`/${clsMetric.id}/optimized`}
+            >
+              Version optimized
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -97,8 +122,8 @@ export default function ClsAnalysisPage() {
             </h2>
             <p className="mt-3 text-sm leading-6 text-zinc-700">
               Le CLS de terrain est évalué au 75e percentile des visites, en
-              distinguant mobile et ordinateur. Une trace ou un audit isolé
-              aide au diagnostic, mais ne représente pas à lui seul toutes les
+              distinguant mobile et ordinateur. Une trace ou un audit isolé aide
+              au diagnostic, mais ne représente pas à lui seul toutes les
               visites réelles.
             </p>
           </div>
@@ -146,7 +171,9 @@ export default function ClsAnalysisPage() {
               </p>
             </li>
             <li className="border-l-2 border-teal-700 pl-4">
-              <h3 className="font-semibold">2. Commencer par le plus gros groupe</h3>
+              <h3 className="font-semibold">
+                2. Commencer par le plus gros groupe
+              </h3>
               <p className="mt-2 text-sm leading-6 text-zinc-700">
                 Repère la piste Layout Shifts et commence par le groupe dont la
                 fenêtre de session cumule le score le plus élevé. Les marqueurs
@@ -154,7 +181,9 @@ export default function ClsAnalysisPage() {
               </p>
             </li>
             <li className="border-l-2 border-teal-700 pl-4">
-              <h3 className="font-semibold">3. Identifier les éléments concernés</h3>
+              <h3 className="font-semibold">
+                3. Identifier les éléments concernés
+              </h3>
               <p className="mt-2 text-sm leading-6 text-zinc-700">
                 Sélectionne un marqueur ou un groupe. DevTools affiche le score,
                 les éléments déplacés et, parfois, une cause probable. L’élément
@@ -163,7 +192,9 @@ export default function ClsAnalysisPage() {
               </p>
             </li>
             <li className="border-l-2 border-teal-700 pl-4">
-              <h3 className="font-semibold">4. Remonter à la ressource ou au code</h3>
+              <h3 className="font-semibold">
+                4. Remonter à la ressource ou au code
+              </h3>
               <p className="mt-2 text-sm leading-6 text-zinc-700">
                 Corrèle l’instant du décalage avec les captures, le DOM et les
                 pistes Network. Vérifie les dimensions des médias, l’injection

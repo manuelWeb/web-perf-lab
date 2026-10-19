@@ -8,7 +8,7 @@ export type SimulatedAccount = {
 export type PublicSimulatedAccount = Pick<
   SimulatedAccount,
   "civility" | "firstName" | "lastLoginAt"
->;
+> | null;
 
 export function parseSimulatedAccount(value: string | undefined) {
   if (!value) return null;

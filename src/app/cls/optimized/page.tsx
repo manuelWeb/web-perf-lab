@@ -16,7 +16,7 @@ export default async function ClsOptimizedPage() {
   return (
     <SiteFrame
       announcement={
-        account?.isConnected ? <WelcomeBannerView account={account} /> : null
+        <WelcomeBannerView account={account?.isConnected ? account : null} />
       }
     >
       <main className="flex-1 bg-stone-50 text-zinc-950">
@@ -36,8 +36,8 @@ export default async function ClsOptimizedPage() {
             </h1>
             <p className="mt-5 max-w-3xl text-base leading-7 text-zinc-700">
               Le serveur lit le cookie et inclut la phrase complète dans le HTML
-              initial. Le navigateur reçoit donc le bandeau à sa position finale,
-              sans insertion tardive ni espace artificiellement réservé.
+              initial. Le navigateur reçoit donc le bandeau à sa position
+              finale, sans insertion tardive ni espace artificiellement réservé.
             </p>
             <h2 className="mt-6 text-lg font-semibold">
               Pourquoi le CLS reste faible
@@ -45,12 +45,12 @@ export default async function ClsOptimizedPage() {
             <p className="mt-2 max-w-3xl text-sm leading-6 text-zinc-700">
               Avant d’envoyer la page, le serveur lit le cookie HttpOnly et
               connaît l’état du compte. Si la session est active, il rend le
-              bandeau complet avant le header dans le HTML initial. Le navigateur
-              calcule ainsi la mise en page avec les deux éléments dès le
-              premier affichage : aucun bandeau tardif ne pousse le contenu et
-              aucun espace fixe à maintenir n’est nécessaire. La lecture du
-              cookie rend cette route dynamique côté serveur, mais ne change pas
-              le rendu statique des autres pages.
+              bandeau complet avant le header dans le HTML initial. Le
+              navigateur calcule ainsi la mise en page avec les deux éléments
+              dès le premier affichage : aucun bandeau tardif ne pousse le
+              contenu et aucun espace fixe à maintenir n’est nécessaire. La
+              lecture du cookie rend cette route dynamique côté serveur, mais ne
+              change pas le rendu statique des autres pages.
             </p>
             <p className="mt-4 max-w-3xl text-sm leading-6 text-zinc-600">
               Connecte-toi avec le bouton du header. Après cette action, le
