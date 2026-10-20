@@ -21,6 +21,8 @@ const nextConfig: NextConfig = {
         pathname: "/**",
       },
     ],
+    formats: ["image/avif", "image/webp"],
+    qualities: [60],
   },
   turbopack: {
     rules: {
