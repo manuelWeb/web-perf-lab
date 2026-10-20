@@ -3,6 +3,7 @@ import Link from "next/link";
 import { SiteFrame } from "@/components/site-frame";
 import { WelcomeBannerView } from "@/components/welcome-banner-view";
 import { readSimulatedAccountCookie } from "@/lib/simulated-account-cookie";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "CLS optimisé | Web Performance Lab",
@@ -21,7 +22,8 @@ export default async function ClsOptimizedPage() {
     >
       <main className="flex-1 bg-stone-50 text-zinc-950">
         <section className="border-b border-zinc-200 bg-white">
-          <div className="mx-auto flex w-full max-w-6xl flex-col px-6 py-10 sm:px-8 lg:px-10">
+          <div className="mx-auto grid w-full max-w-6xl items-center gap-8 px-6 py-10 sm:px-8 lg:grid-cols-2 lg:px-10">
+            <div className="flex flex-col">
             <Link
               className="w-fit text-sm font-semibold text-teal-700 transition-colors hover:text-teal-900"
               href="/cls/analysis"
@@ -64,6 +66,16 @@ export default async function ClsOptimizedPage() {
             >
               Comparer avec la version slow
             </Link>
+            </div>
+
+            <Image
+              alt="CLS optimized example"
+              className="h-auto w-full"
+              height={1394}
+              sizes="(min-width: 1024px) 520px, (min-width: 640px) calc(100vw - 64px), calc(100vw - 48px)"
+              src="/images/cls/CLS-optimized-banner.png"
+              width={1216}
+            />
           </div>
         </section>
 
