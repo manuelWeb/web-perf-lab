@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { formatPrice } from "@/lib/catalogue";
 import {
   getLcpExperimentProduct,
   LCP_EXPERIMENT_IMAGE_URL,
@@ -12,24 +11,10 @@ export default function OptimizedLcpPage() {
   return (
     <main className="flex-1 bg-stone-50 text-zinc-950">
       <section className="border-b border-zinc-200 bg-white">
-        <div className="mx-auto grid w-full max-w-6xl gap-8 px-6 py-10 sm:px-8 lg:grid-cols-[0.95fr_1.05fr] lg:px-10">
+        <div className="mx-auto grid w-full max-w-6xl items-center gap-8 px-6 py-10 sm:px-8 lg:grid-cols-[0.95fr_1.05fr] lg:px-10">
           <div className="flex flex-col justify-center">
-            <div className="flex flex-wrap gap-4 text-sm font-semibold">
-              <Link
-                className="text-teal-700 transition-colors hover:text-teal-900"
-                href="/"
-              >
-                Retour aux métriques
-              </Link>
-              <Link
-                className="text-zinc-700 transition-colors hover:text-zinc-950"
-                href="/lcp/slow"
-              >
-                Voir la version slow
-              </Link>
-            </div>
-            <p className="mt-8 text-sm font-semibold uppercase tracking-wide text-teal-700">
-              LCP optimized
+            <p className="text-sm font-semibold uppercase tracking-wide text-green-700">
+              Expérience LCP · version optimisée
             </p>
             <h1 className="mt-3 text-4xl font-semibold tracking-normal sm:text-5xl">
               Image principale priorisée
@@ -39,30 +24,25 @@ export default function OptimizedLcpPage() {
               indique explicitement au navigateur que l’image visible dans le
               viewport sans défilement est critique pour le rendu initial.
             </p>
+            <Link
+              className="mt-4 w-fit text-sm font-semibold text-teal-700 underline decoration-teal-300 underline-offset-4 transition-colors hover:text-teal-900"
+              href="/lcp/slow"
+            >
+              Comparer avec la version slow
+            </Link>
           </div>
 
-          <article className="overflow-hidden rounded-md border border-zinc-200 bg-stone-50">
-            <div className="relative aspect-[4/3] bg-stone-100">
+          <article className="order-first overflow-hidden rounded-md border border-zinc-200 bg-stone-50 lg:order-last">
+            <div className="relative aspect-4/3 bg-stone-100">
               <Image
                 alt={product.name}
                 className="object-cover"
                 fetchPriority="high"
                 fill
                 loading="eager"
-                sizes="(max-width: 1024px) 100vw, 544px"
+                sizes="(min-width: 1024px) 544px, (min-width: 640px) calc(100vw - 64px), calc(100vw - 48px)"
                 src={LCP_EXPERIMENT_IMAGE_URL}
               />
-            </div>
-            <div className="flex items-start justify-between gap-4 p-5">
-              <div>
-                <h2 className="text-xl font-semibold">{product.name}</h2>
-                <p className="mt-1 text-sm capitalize text-zinc-600">
-                  {product.category}
-                </p>
-              </div>
-              <p className="shrink-0 text-sm font-semibold">
-                {formatPrice(product.priceInCents)}
-              </p>
             </div>
           </article>
         </div>
