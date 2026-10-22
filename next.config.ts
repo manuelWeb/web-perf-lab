@@ -6,6 +6,8 @@ const nextConfig: NextConfig = {
   output: isLocalBuild ? undefined : "standalone",
   productionBrowserSourceMaps: isLocalBuild,
   images: {
+    // Ask browsers to display optimized images inline instead of downloading them.
+    contentDispositionType: "inline",
     remotePatterns: [
       {
         protocol: "https",
@@ -25,7 +27,7 @@ const nextConfig: NextConfig = {
       },
     ],
     formats: ["image/avif", "image/webp"],
-    qualities: [60],
+    qualities: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
   },
   turbopack: {
     rules: {
