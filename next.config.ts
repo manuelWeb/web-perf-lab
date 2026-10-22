@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
 
+const isLocalBuild = process.env.BUILD_LOCAL === "true";
+
 const nextConfig: NextConfig = {
-  output: "standalone",
+  output: isLocalBuild ? undefined : "standalone",
+  productionBrowserSourceMaps: isLocalBuild,
   images: {
     remotePatterns: [
       {
