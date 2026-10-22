@@ -15,6 +15,8 @@ ENV HOSTNAME=0.0.0.0
 COPY --from=build /app/public ./public
 COPY --from=build /app/.next/standalone ./
 COPY --from=build /app/.next/static ./.next/static
+# Create the cache directory (-d), with node as its owner (-o) and group (-g).
+RUN install -d -o node -g node /app/.next/cache/images
 USER node
 EXPOSE 3000
 CMD ["node", "server.js"]
