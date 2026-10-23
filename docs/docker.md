@@ -13,8 +13,9 @@ Le Dockerfile utilise deux étapes basées sur Node.js 24 Debian slim :
 2. `runtime` ne copie que le serveur standalone, `.next/static` et `public`. Il
    démarre avec `node server.js` sous l'utilisateur `node`.
 
-Le contexte exclut `node_modules`, les builds précédents, Git, les fichiers
-`.env*`, les journaux et le dossier `deploy`.
+Le contexte exclut `node_modules`, `.next`, `.git`, `.github`, `.husky`, `deploy`
+et `docs`, ainsi que `.env*`, les journaux, `README.md` et `AGENTS.md`. Les guides
+et configurations de déploiement ne sont donc pas copiés dans l'image.
 
 ## Service Compose
 
@@ -38,5 +39,5 @@ Le port `3040` suit la convention des autres applications du serveur
 `portfolio`).
 
 Pour lancer une version et consulter les journaux, suivre le
-[guide de déploiement](deployment.md). Le proxy de l'hôte est décrit dans
-[nginx.md](nginx.md).
+[guide de déploiement](deploy/deployment.md). Le proxy de l'hôte est décrit dans
+[le guide Nginx](deploy/nginx/nginx.md).
