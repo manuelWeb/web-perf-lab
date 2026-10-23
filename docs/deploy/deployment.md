@@ -17,13 +17,13 @@ puis relancer la commande.
 
 ## CI
 
-Le workflow [`../.github/workflows/ci.yml`](../.github/workflows/ci.yml) se
+Le workflow [`../../.github/workflows/ci.yml`](../../.github/workflows/ci.yml) se
 déclenche sur les PR ciblant `main`. Il installe les dépendances puis vérifie
 ESLint, TypeScript et le build Next.js (Node.js 24, aligné avec le Dockerfile).
 
 ## Livraison automatique (CD)
 
-Le workflow [`../.github/workflows/deploy.yml`](../.github/workflows/deploy.yml)
+Le workflow [`../../.github/workflows/deploy.yml`](../../.github/workflows/deploy.yml)
 se déclenche sur `push` filtré sur `main` — jamais sur une PR elle-même, pour
 qu'aucun code non fusionné ne soit livré.
 
@@ -47,10 +47,9 @@ runner auto-hébergé évite ce problème : il se connecte en sortant vers GitHu
 (polling), aucun port entrant à ouvrir, aucun secret SSH à gérer ni de clé à
 exposer. C'est aussi la solution la plus sûre pour un serveur à la maison.
 
-Limite de cette approche : le runner tourne en permanence sur le serveur et
-exécute le job avec les droits de l'utilisateur système `manuel` — ne pas lui
-faire exécuter du code non fiable issu d'une PR externe (ce n'est pas un
-risque ici, le repo n'accepte que des PR internes).
+Le runner tourne en permanence sur le serveur et exécute le job avec les droits
+de l'utilisateur système `manuel`. Il faut donc protéger `main` et ne jamais
+lui faire exécuter du code non fiable provenant d'une PR.
 
 ### Protection de branche
 
@@ -69,12 +68,11 @@ déclencherait quand même le déploiement.
 ### Limites actuelles
 
 Ce flux reste volontairement simple (pas de registre d'images, rebuild direct
-sur le serveur) : suffisant pour un projet sans backend et à faible trafic. En
-cas d'échec du build ou du healthcheck, **le conteneur précédent continue de
-tourner** (Compose ne coupe le service en cours que lorsque le remplacement
-réussit), mais rien ne restaure automatiquement une image antérieure taguée :
-il n'y a pas encore de rollback automatisé. Une publication d'image taguée sur
-un registre (avec conservation de l'image précédente) pourra être envisagée si
-le projet grossit.
+sur le serveur). Si le build échoue, `docker compose up` n'est pas exécuté et le
+conteneur courant reste en place. En revanche, si Compose recrée le conteneur
+mais que le nouveau ne devient pas sain, `--wait` fait échouer la commande sans
+restaurer automatiquement l'ancien conteneur ou son image : une interruption de
+service est possible. Il n'y a donc pas encore de rollback automatisé. Voir la
+[documentation de `docker compose up`](https://docs.docker.com/reference/cli/docker/compose/up/).
 
 Référence : [événements GitHub Actions](https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows).
