@@ -1,10 +1,15 @@
+import { CookiePreferencesButton } from "@/components/consent-manager";
+
 export function SiteFooter() {
   return (
     <footer className="border-t border-zinc-200 bg-white">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-4 px-6 py-6 text-sm sm:flex-row sm:items-center sm:justify-between sm:px-8 lg:px-10">
         <p className="font-semibold text-zinc-700">Web Performance Lab</p>
-        <nav aria-label="Liens externes et portfolio">
+        <nav aria-label="Liens et confidentialité">
           <ul className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            <li>
+              <CookiePreferencesButton />
+            </li>
             <li>
               <button
                 className="cursor-not-allowed font-medium text-zinc-400"

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { GoogleTagManager } from "@next/third-parties/google";
+import { ConsentManager } from "@/components/consent-manager";
 import { Inter } from "next/font/google";
+import "vanilla-cookieconsent/dist/cookieconsent.css";
 import "./globals.css";
 
 const inter = Inter({
@@ -21,8 +22,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="fr" className="h-full antialiased">
       <body className={`flex min-h-screen flex-col ${inter.variable}`}>
         {children}
-        {/* Le layout racine partage une seule instance GTM entre les routes. */}
-        {gtmId ? <GoogleTagManager gtmId={gtmId} /> : null}
+        {/* Une seule instance de consentement, conservée entre les routes. */}
+        <ConsentManager gtmId={gtmId} />
       </body>
     </html>
   );

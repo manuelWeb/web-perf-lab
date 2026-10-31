@@ -24,3 +24,13 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans);
 }
+
+/* Variables officielles du SDK : apparence cohérente sans réécrire ses modales. */
+#cc-main {
+  --cc-font-family: var(--font-sans);
+  --cc-btn-primary-bg: #115e59;
+  --cc-btn-primary-border-color: #115e59;
+  --cc-btn-primary-hover-bg: #134e4a;
+  --cc-btn-primary-hover-border-color: #134e4a;
+  --cc-toggle-on-bg: #115e59;
+}
