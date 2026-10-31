@@ -17,11 +17,56 @@ Le contexte exclut `node_modules`, `.next`, `.git`, `.github`, `.husky`, `deploy
 et `docs`, ainsi que `.env*`, les journaux, `README.md` et `AGENTS.md`. Les guides
 et configurations de déploiement ne sont donc pas copiés dans l'image.
 
+## Identifiant GTM depuis `.env`
+
+Dans le fichier `.env` situé à côté de `docker-compose.yml`, configurer :
+
+```dotenv
+NEXT_PUBLIC_GTM_ID=GTM-WHDFW9CD
+```
+
+Compose lit `.env` pour résoudre `build.args.NEXT_PUBLIC_GTM_ID`. Une variable
+exportée dans le shell est prioritaire sur celle du fichier. Le Dockerfile
+reçoit cette valeur via `ARG`, dans l'étape `build`, avant `npm run build`.
+Next.js intègre alors l'identifiant dans les fichiers générés.
+
+Le fichier `.env` reste exclu du contexte Docker : on transmet uniquement la
+variable publique nécessaire à GTM, pas l'ensemble du fichier. Une section
+`env_file` injecterait des variables au démarrage du conteneur ; elle ne remplace
+pas ce passage au build pour `NEXT_PUBLIC_GTM_ID`.
+
+Sans valeur, l'argument est vide et le layout n'ajoute pas GTM. L'identifiant
+GA4 est configuré dans le conteneur GTM ; `NEXT_PUBLIC_GA_MEASUREMENT_ID` n'est
+actuellement pas lu par l'application et n'a donc pas à être transmis à Docker.
+
+Pour vérifier la substitution sans construire ni démarrer de conteneur :
+
+```bash
+docker compose config
+```
+
+Contrôler la valeur dans `services.app.build.args.NEXT_PUBLIC_GTM_ID`.
+Après un changement d'identifiant, reconstruire l'image puis recréer le service :
+
+```bash
+docker compose build
+docker compose up -d --wait
+```
+
+Un simple redémarrage ou une modification des variables du conteneur existant
+ne modifie pas les fichiers déjà construits. Pour un build sans Compose,
+transmettre explicitement `--build-arg NEXT_PUBLIC_GTM_ID=GTM-WHDFW9CD` à
+`docker build` : Docker seul ne charge pas automatiquement le fichier `.env`.
+
+Références : [interpolation Compose](https://docs.docker.com/compose/how-tos/environment-variables/variable-interpolation/)
+et [variables au build](https://docs.docker.com/build/building/variables/).
+
 ## Service Compose
 
 | Paramètre                 | Rôle                                                                          |
 | -------------------------- | ------------------------------------------------------------------------------ |
-| `build: .`                 | Construit l'image depuis le projet courant.                                   |
+| `build.context: .`         | Construit l'image depuis le projet courant.                                   |
+| `build.args`               | Transmet l'identifiant GTM de `.env` au build Next.js.                         |
 | `127.0.0.1:3040:3000`       | Expose le port 3000 du conteneur uniquement sur le port local 3040 de l'hôte. |
 | `restart: unless-stopped`  | Redémarre le service, sauf après un arrêt volontaire.                         |
 | `healthcheck`               | Attend une réponse HTTP réussie de `/` sur le port interne 3000 via `fetch`.  |

@@ -4,6 +4,8 @@ ENV NEXT_TELEMETRY_DISABLED=1
 COPY package.json package-lock.json ./
 RUN npm ci --ignore-scripts
 COPY . .
+# Next.js intègre cet identifiant public pendant le build, pas au démarrage.
+ARG NEXT_PUBLIC_GTM_ID
 RUN npm run build
 
 FROM node:24-slim AS runtime

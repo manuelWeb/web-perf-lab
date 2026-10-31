@@ -2,6 +2,12 @@
 
 ## Déploiement manuel
 
+Préparer sur le serveur `/opt/apps/web-perf-lab/.env` avec
+`NEXT_PUBLIC_GTM_ID=GTM-WHDFW9CD` pour activer GTM. Ce fichier non versionné
+est lu par Compose pour alimenter le build ; il n'est pas copié dans l'image.
+Le déploiement automatique ci-dessous utilise le même fichier du serveur.
+Voir le [détail du passage au build](../docker.md#identifiant-gtm-depuis-env).
+
 Depuis le dossier du projet sur le serveur, construire la branche courante puis
 remplacer le conteneur par la nouvelle image :
 

@@ -1,6 +1,10 @@
 services:
   app:
-    build: .
+    build:
+      context: .
+      args:
+        # Compose lit cette valeur dans le fichier .env du projet.
+        NEXT_PUBLIC_GTM_ID: "${NEXT_PUBLIC_GTM_ID:-}"
     container_name: web-perf-lab-app
     restart: unless-stopped
     ports:
