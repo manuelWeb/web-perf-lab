@@ -40,3 +40,4 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 - [Déploiement : Docker, Nginx et CI/CD](docs/deploy/README.md)
 - [Audit de sécurité des dépendances npm](docs/npm-audit-process.md)
 - [Analytics : tester GTM et GA4 en local et en production](docs/analytics/README.md)
+- [Consentement : fonctionnement et vérification des choix](docs/consent/README.md)

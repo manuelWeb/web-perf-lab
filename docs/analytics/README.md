@@ -10,13 +10,15 @@ DevTools sont en anglais ; l'interface Google peut mélanger français et anglai
 
 ```text
 Layout racine Next.js
-→ GoogleTagManager charge le conteneur GTM une fois par document
+→ CookieConsent recueille ou restaure le choix
+→ si Analytics est accepté, GoogleTagManager charge le conteneur GTM une fois par document
 → la configuration du conteneur déclenche la destination GA4
 → GA4 reçoit les événements, dont page_view
 ```
 
 Le composant officiel `GoogleTagManager`, fourni par `@next/third-parties`, est
-installé dans [`src/app/layout.tsx`](../../src/app/layout.tsx). Il initialise
+monté par [`ConsentManager`](../../src/components/consent-manager.tsx), placé dans
+le layout racine. Il initialise
 `window.dataLayer` et utilise `next/script` pour charger GTM après le début de
 l'hydratation. Le layout partagé conserve cette instance pendant les navigations
 Next.js côté client. Un rechargement complet crée un nouveau document et charge
@@ -51,9 +53,9 @@ L'initialisation du conteneur correspond au chargement d'un document. Le suivi
 des changements de route Next.js doit être contrôlé séparément ; le déclencheur
 initial ne prouve pas, à lui seul, ce suivi.
 
-Cette branche est une étape d'instrumentation : elle ne contient pas encore le
-gestionnaire de consentement. Son intégration et le contrôle du déclenchement
-selon le choix utilisateur font partie de l'étape suivante.
+Le conteneur est maintenant bloqué avant acceptation de la catégorie Analytics.
+Un refus doit laisser `gtm.js` et `collect` absents de Network. Consulter le
+[guide du consentement](../consent/README.md) pour tester les différents choix.
 
 ## 2. Démarrer en local
 
@@ -85,7 +87,8 @@ utiliser le build de production, sans breakpoints ni `debugger;`.
 
 **Où : DevTools → Network.**
 
-1. Ouvrir Network avant de recharger la page.
+1. Accepter la mesure d’audience dans la popin, puis ouvrir Network avant de
+   recharger la page. Sans accord, l’absence de GTM est le résultat attendu.
 2. Filtrer sur `gtm.js`.
 3. Vérifier une requête vers `www.googletagmanager.com/gtm.js` avec le bon
    paramètre `id=GTM-…` et une réponse réussie, normalement `200`.
@@ -118,6 +121,8 @@ Ne pas réinjecter le snippet Google manuellement pour contourner un échec.
 2. Cliquer sur **Prévisualiser / Preview**.
 3. Dans Tag Assistant, saisir `http://localhost:3000/`, puis **Connect / Se connecter**.
 4. Le site s'ouvre dans une fenêtre ou un onglet avec un paramètre de débogage.
+   Accepter Analytics sur ce navigateur pour autoriser le chargement de GTM et
+   permettre la connexion de Tag Assistant.
 5. Garder le site ouvert et revenir dans **Tag Assistant**.
 6. Cliquer sur **Continue / Continuer** si proposé.
 7. Dans les événements de la page, sélectionner **Initialization**, puis vérifier
