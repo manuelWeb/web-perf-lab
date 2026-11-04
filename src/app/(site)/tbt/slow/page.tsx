@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import { SlowProductRecommendations } from "@/components/retail/slow-product-recommendations";
 
 export const metadata: Metadata = {
@@ -26,6 +27,12 @@ export default function SlowTbtPage() {
               recommandations mobilise le thread principal et retarde la
               disponibilité du navigateur.
             </p>
+            <Link
+              className="mt-4 w-fit text-sm font-semibold text-teal-700 underline decoration-teal-300 underline-offset-4 transition-colors hover:text-teal-900"
+              href="/tbt/optimized/deferred"
+            >
+              Comparer avec la version différée
+            </Link>
           </div>
 
           <article className="overflow-hidden rounded-md border border-zinc-200 bg-stone-50">
