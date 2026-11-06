@@ -35,6 +35,13 @@ export default function DeferredTbtPage() {
             </Link>
             <Link
               className="mt-4 w-fit text-sm font-semibold text-teal-700 underline decoration-teal-300 underline-offset-4 transition-colors hover:text-teal-900"
+              prefetch={false}
+              href="/tbt/optimized/webworker"
+            >
+              Comparer avec la version Web Worker
+            </Link>
+            <Link
+              className="mt-4 w-fit text-sm font-semibold text-teal-700 underline decoration-teal-300 underline-offset-4 transition-colors hover:text-teal-900"
               href="/tbt/optimized/lazy-loading"
             >
               Comparer avec la version lazy loading
