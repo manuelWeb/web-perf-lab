@@ -8,6 +8,7 @@ export type PerformanceMetric = {
   hasAnalysisGuide: boolean;
   experimentRoutes: {
     optimized: boolean;
+    optimizedHref?: string;
     slow: boolean;
   };
   seoImpact: string;
@@ -109,10 +110,11 @@ export const performanceMetrics = [
     scoreWeight: "30% du score Performance Lighthouse.",
     description:
       "Somme des periodes ou le thread principal reste bloque assez longtemps pour retarder les interactions.",
-    hasAnalysisGuide: false,
+    hasAnalysisGuide: true,
     experimentRoutes: {
-      optimized: false,
-      slow: false,
+      optimized: true,
+      optimizedHref: "/tbt/optimized/webworker",
+      slow: true,
     },
     seoImpact:
       "Pas un signal SEO direct, mais souvent correle aux problemes d'INP.",
