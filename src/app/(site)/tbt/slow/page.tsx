@@ -33,6 +33,12 @@ export default function SlowTbtPage() {
             >
               Comparer avec la version différée
             </Link>
+            <Link
+              className="mt-4 w-fit text-sm font-semibold text-teal-700 underline decoration-teal-300 underline-offset-4 transition-colors hover:text-teal-900"
+              href="/tbt/optimized/lazy-loading"
+            >
+              Comparer avec la version lazy loading
+            </Link>
           </div>
 
           <article className="overflow-hidden rounded-md border border-zinc-200 bg-stone-50">
