@@ -156,7 +156,7 @@ function MetricCard({ metric }: { metric: PerformanceMetric }) {
                 ? "bg-zinc-950 text-white hover:bg-zinc-800"
                 : "pointer-events-none bg-zinc-200 text-zinc-400"
             }`}
-            href={`/${metric.id}/optimized`}
+            href={metric.experimentRoutes.optimizedHref ?? `/${metric.id}/optimized`}
           >
             Version optimized
           </Link>
