@@ -8,6 +8,19 @@ est lu par Compose pour alimenter le build ; il n'est pas copié dans l'image.
 Le déploiement automatique ci-dessous utilise le même fichier du serveur.
 Voir le [détail du passage au build](../docker.md#identifiant-gtm-depuis-env).
 
+Pour activer Datadog RUM, ajouter au même `.env` les valeurs de l’application
+Browser dans Datadog EU :
+
+```dotenv
+NEXT_PUBLIC_DATADOG_APPLICATION_ID=identifiant_application
+NEXT_PUBLIC_DATADOG_CLIENT_TOKEN=token_client_browser
+NEXT_PUBLIC_DATADOG_ENV=production
+```
+
+Compose transmet ces variables au build Next.js. L’environnement par défaut
+dans Compose est `production`. RUM s’active avec les deux identifiants
+renseignés et collecte les vues après acceptation de la mesure d’audience.
+
 Depuis le dossier du projet sur le serveur, construire la branche courante puis
 remplacer le conteneur par la nouvelle image :
 
