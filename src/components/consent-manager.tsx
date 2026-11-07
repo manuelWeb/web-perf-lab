@@ -1,5 +1,6 @@
 "use client";
 
+import { datadogRum } from "@datadog/browser-rum";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { GoogleTagManager } from "@next/third-parties/google";
@@ -26,6 +27,7 @@ export function ConsentManager({ gtmId }: { gtmId?: string }) {
   useEffect(() => {
     function synchronizeConsent() {
       const accepted = CookieConsent.acceptedCategory("analytics");
+      datadogRum.setTrackingConsent(accepted ? "granted" : "not-granted");
       setAnalyticsAllowed(accepted);
       if (!accepted) {
         // Nettoie aussi les anciens cookies créés avant l'ajout du gestionnaire.
@@ -55,9 +57,7 @@ export function ConsentManager({ gtmId }: { gtmId?: string }) {
       },
     }).then(() => {
       setReady(true);
-      if (!CookieConsent.acceptedCategory("analytics")) {
-        clearAnalyticsCookies();
-      }
+      synchronizeConsent();
     });
   }, []);
 

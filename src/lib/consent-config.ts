@@ -3,7 +3,7 @@ import type { CookieConsentConfig } from "vanilla-cookieconsent";
 // Configuration déclarative séparée du cycle de vie React pour rester lisible.
 export const consentConfig: CookieConsentConfig = {
   mode: "opt-in",
-  revision: 1,
+  revision: 2,
   manageScriptTags: false, // React contrôle explicitement le montage de GTM.
   disablePageInteraction: true,
   cookie: {
@@ -33,7 +33,7 @@ export const consentConfig: CookieConsentConfig = {
         consentModal: {
           title: "Vos préférences de confidentialité",
           description:
-            "Ce site utilise des cookies nécessaires à son fonctionnement. Avec votre accord, Google Analytics mesure les visites et les pages consultées. Vous pouvez refuser cette mesure et continuer à consulter le site.",
+            "Ce site utilise des cookies nécessaires à son fonctionnement. Avec votre accord, Google Analytics mesure les visites et Datadog mesure les performances du site. Vous pouvez refuser cette mesure et continuer à consulter le site.",
           acceptAllBtn: "Tout accepter",
           acceptNecessaryBtn: "Tout refuser",
           showPreferencesBtn: "Personnaliser",
@@ -58,9 +58,9 @@ export const consentConfig: CookieConsentConfig = {
               linkedCategory: "necessary",
             },
             {
-              title: "Mesure d’audience — Google Analytics",
+              title: "Mesure d’audience et de performance",
               description:
-                "Google Analytics, chargé via Google Tag Manager, mesure les visites, les pages et les interactions. Les cookies _ga et _ga_* distinguent les visiteurs et les sessions. Aucun de ces scripts n’est chargé avant votre accord. Le retrait efface ces cookies accessibles sur ce domaine ; il ne supprime pas les données déjà transmises à Google.",
+                "Google Analytics mesure les visites avec les cookies _ga et _ga_*. Datadog RUM mesure les temps de chargement et la réactivité des pages avec le cookie de session _dd_s_v2. La collecte commence après votre accord. Datadog n’enregistre pas de replay de votre session.",
               linkedCategory: "analytics",
             },
             {

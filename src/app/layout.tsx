@@ -1,3 +1,4 @@
+import { DatadogAppRouter } from "@datadog/browser-rum-nextjs";
 import type { Metadata } from "next";
 import { ConsentManager } from "@/components/consent-manager";
 import { Inter } from "next/font/google";
@@ -16,11 +17,16 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
+  const rumConfigured = Boolean(
+    process.env.NEXT_PUBLIC_DATADOG_APPLICATION_ID &&
+      process.env.NEXT_PUBLIC_DATADOG_CLIENT_TOKEN,
+  );
   const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
 
   return (
     <html lang="fr" className="h-full antialiased">
       <body className={`flex min-h-screen flex-col ${inter.variable}`}>
+        {rumConfigured && <DatadogAppRouter />}
         {children}
         {/* Une seule instance de consentement, conservée entre les routes. */}
         <ConsentManager gtmId={gtmId} />
