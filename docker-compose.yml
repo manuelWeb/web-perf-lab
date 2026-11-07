@@ -3,8 +3,11 @@ services:
     build:
       context: .
       args:
-        # Compose lit cette valeur dans le fichier .env du projet.
+        # Compose lit ces valeurs dans le fichier .env du projet.
         NEXT_PUBLIC_GTM_ID: "${NEXT_PUBLIC_GTM_ID:-}"
+        NEXT_PUBLIC_DATADOG_APPLICATION_ID: "${NEXT_PUBLIC_DATADOG_APPLICATION_ID:-}"
+        NEXT_PUBLIC_DATADOG_CLIENT_TOKEN: "${NEXT_PUBLIC_DATADOG_CLIENT_TOKEN:-}"
+        NEXT_PUBLIC_DATADOG_ENV: "${NEXT_PUBLIC_DATADOG_ENV:-production}"
     container_name: web-perf-lab-app
     restart: unless-stopped
     ports:

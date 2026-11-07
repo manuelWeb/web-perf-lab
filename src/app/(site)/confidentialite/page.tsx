@@ -31,12 +31,20 @@ export default function PrivacyPage() {
         </a>{' '}
         pour en savoir plus sur ce fournisseur.
       </p>
+      <p>
+        Avec le même accord, Datadog RUM mesure les performances des pages,
+        notamment les temps d’affichage, les interactions et le chargement des
+        ressources. Le cookie _dd_s_v2 associe ces mesures à une session. La
+        collecte est envoyée à l’instance européenne de Datadog. La fonction
+        Session Replay est désactivée.
+      </p>
       <h2 className="text-xl font-semibold">Modifier ou retirer votre accord</h2>
       <p>
         Le bouton « Gérer mes cookies » du pied de page ouvre vos préférences.
-        Le retrait efface les cookies Analytics accessibles sur le domaine et
-        recharge la page pour arrêter les scripts déjà exécutés. Il ne supprime
-        pas les données précédemment transmises à Google.
+        Le retrait efface les cookies Google Analytics accessibles sur le domaine et
+        arrête la collecte Datadog. La page se recharge pour arrêter les scripts
+        Google déjà exécutés. Les données déjà transmises restent chez les
+        fournisseurs.
       </p>
     </main>
   );
