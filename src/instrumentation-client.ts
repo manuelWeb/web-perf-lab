@@ -21,6 +21,7 @@ if (shouldInitializeRum && applicationId && clientToken) {
     site: "datadoghq.eu",
     service: "web-performance-lab",
     env: rumEnvironment,
+    version: process.env.NEXT_PUBLIC_DATADOG_VERSION || undefined,
     plugins: [nextjsPlugin()],
     trackingConsent: "not-granted",
     sessionSampleRate: 100,

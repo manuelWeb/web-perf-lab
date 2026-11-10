@@ -12,11 +12,18 @@ jobs:
 
     steps:
       - name: Deploy
+        env:
+          DD_API_KEY: ${{ secrets.DD_API_KEY }}
         run: |
           set -e
           cd /opt/apps/web-perf-lab
           git fetch origin main
           git checkout main
           git reset --hard origin/main
-          docker compose build
-          docker compose up -d --wait
+          export NEXT_PUBLIC_DATADOG_VERSION="$(git rev-parse --short=7 HEAD)"
+          if [ -n "$DD_API_KEY" ]; then
+            docker compose -f docker-compose.yml -f docker-compose.datadog.yml build
+          else
+            docker compose build
+          fi
+          docker compose up -d --wait --no-build
