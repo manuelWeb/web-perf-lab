@@ -4,7 +4,8 @@ const isLocalBuild = process.env.BUILD_LOCAL === "true";
 
 const nextConfig: NextConfig = {
   output: isLocalBuild ? undefined : "standalone",
-  productionBrowserSourceMaps: isLocalBuild,
+  productionBrowserSourceMaps:
+    isLocalBuild || process.env.DATADOG_UPLOAD_SOURCEMAPS === "true",
   images: {
     // Ask browsers to display optimized images inline instead of downloading them.
     contentDispositionType: "inline",

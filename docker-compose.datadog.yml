@@ -1,0 +1,11 @@
+services:
+  app:
+    build:
+      args:
+        DATADOG_UPLOAD_SOURCEMAPS: "true"
+      secrets:
+        - datadog_api_key
+
+secrets:
+  datadog_api_key:
+    environment: DD_API_KEY
