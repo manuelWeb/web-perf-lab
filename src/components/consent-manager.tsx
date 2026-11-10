@@ -1,7 +1,7 @@
 "use client";
 
 import { datadogRum } from "@datadog/browser-rum";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { GoogleTagManager } from "@next/third-parties/google";
 import * as CookieConsent from "vanilla-cookieconsent";
@@ -23,11 +23,26 @@ export function ConsentManager({ gtmId }: { gtmId?: string }) {
   const [analyticsAllowed, setAnalyticsAllowed] = useState(false);
   const [ready, setReady] = useState(false);
   const pathname = usePathname();
+  const previousConsent = useRef(false);
+  const gtmReported = useRef(false);
+
+  useLayoutEffect(() => {
+    if (!analyticsAllowed || !gtmId || gtmReported.current) return;
+
+    // Next.js inserts the GTM script in a passive effect after this commit.
+    gtmReported.current = true;
+    datadogRum.addAction("gtm_injected");
+  }, [analyticsAllowed, gtmId]);
 
   useEffect(() => {
     function synchronizeConsent() {
-      const accepted = CookieConsent.acceptedCategory("analytics");
+      const accepted =
+        CookieConsent.validConsent() && CookieConsent.acceptedCategory("analytics");
       datadogRum.setTrackingConsent(accepted ? "granted" : "not-granted");
+      if (accepted && !previousConsent.current) {
+        datadogRum.addAction("consent_resolved");
+      }
+      previousConsent.current = accepted;
       setAnalyticsAllowed(accepted);
       if (!accepted) {
         // Nettoie aussi les anciens cookies créés avant l'ajout du gestionnaire.
