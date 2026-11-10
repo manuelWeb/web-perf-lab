@@ -35,8 +35,10 @@ export default function PrivacyPage() {
         Avec le même accord, Datadog RUM mesure les performances des pages,
         notamment les temps d’affichage, les interactions et le chargement des
         ressources. Le cookie _dd_s_v2 associe ces mesures à une session. La
-        collecte est envoyée à l’instance européenne de Datadog. La fonction
-        Session Replay est désactivée.
+        collecte est envoyée à l’instance européenne de Datadog. En production,
+        Session Replay reconstitue la navigation d’un échantillon de sessions
+        pour aider à diagnostiquer les problèmes rencontrés. Le texte, les images
+        et les saisies sont masqués.
       </p>
       <h2 className="text-xl font-semibold">Modifier ou retirer votre accord</h2>
       <p>

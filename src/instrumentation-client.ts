@@ -25,7 +25,7 @@ if (shouldInitializeRum && applicationId && clientToken) {
     plugins: [nextjsPlugin()],
     trackingConsent: "not-granted",
     sessionSampleRate: 100,
-    sessionReplaySampleRate: 0,
+    sessionReplaySampleRate: rumEnvironment === "production" ? 20 : 0,
     trackResources: true,
     trackUserInteractions: true,
     trackLongTasks: true,

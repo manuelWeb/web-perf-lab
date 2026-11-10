@@ -3,7 +3,7 @@ import type { CookieConsentConfig } from "vanilla-cookieconsent";
 // Configuration déclarative séparée du cycle de vie React pour rester lisible.
 export const consentConfig: CookieConsentConfig = {
   mode: "opt-in",
-  revision: 2,
+  revision: 3,
   manageScriptTags: false, // React contrôle explicitement le montage de GTM.
   disablePageInteraction: true,
   cookie: {
@@ -33,7 +33,7 @@ export const consentConfig: CookieConsentConfig = {
         consentModal: {
           title: "Vos préférences de confidentialité",
           description:
-            "Ce site utilise des cookies nécessaires à son fonctionnement. Avec votre accord, Google Analytics mesure les visites et Datadog mesure les performances du site. Vous pouvez refuser cette mesure et continuer à consulter le site.",
+            "Ce site utilise des cookies nécessaires à son fonctionnement. Avec votre accord, Google Analytics mesure les visites et Datadog mesure les performances du site et enregistre une reconstitution masquée de certaines sessions. Vous pouvez refuser cette collecte et continuer à consulter le site.",
           acceptAllBtn: "Tout accepter",
           acceptNecessaryBtn: "Tout refuser",
           showPreferencesBtn: "Personnaliser",
@@ -60,7 +60,7 @@ export const consentConfig: CookieConsentConfig = {
             {
               title: "Mesure d’audience et de performance",
               description:
-                "Google Analytics mesure les visites avec les cookies _ga et _ga_*. Datadog RUM mesure les temps de chargement et la réactivité des pages avec le cookie de session _dd_s_v2. La collecte commence après votre accord. Datadog n’enregistre pas de replay de votre session.",
+                "Google Analytics mesure les visites avec les cookies _ga et _ga_*. Datadog RUM mesure les temps de chargement et la réactivité des pages avec le cookie de session _dd_s_v2. La collecte commence après votre accord. Sur certaines sessions, Datadog reconstitue la navigation pour aider à comprendre les problèmes rencontrés. Le texte, les images et les saisies sont masqués.",
               linkedCategory: "analytics",
             },
             {
