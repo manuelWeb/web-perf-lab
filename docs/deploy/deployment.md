@@ -34,6 +34,13 @@ puis relancer la commande.
 
 `docker compose restart` seul ne prend pas en compte la nouvelle image.
 
+## Datadog RUM et source maps
+
+Le déploiement automatique renseigne la version RUM avec les sept premiers
+caractères du SHA du commit déployé. L’upload privé des source maps, la création
+de la clé API et sa configuration dans GitHub Actions sont décrits dans le
+[guide Datadog RUM et source maps](datadog-rum.md).
+
 ## CI
 
 Le workflow [`../../.github/workflows/ci.yml`](../../.github/workflows/ci.yml) se
