@@ -24,7 +24,7 @@ configuration active, valider et recharger Nginx, puis reporter la version utili
 ```bash
 sudo nginx -t && sudo systemctl reload nginx
 cp /etc/nginx/conf.d/webperfs.webdesignord.fr.conf \
-  /opt/apps/web-perf-lab/docs/deploy/nginx/webperfs.webdesignord.fr.conf
+  /opt/apps/web-performance-lab/web-perf-lab/docs/deploy/nginx/webperfs.webdesignord.fr.conf
 ```
 
 Relire le diff avant de committer. Les chemins des certificats peuvent être

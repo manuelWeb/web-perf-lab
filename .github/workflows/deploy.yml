@@ -16,7 +16,7 @@ jobs:
           DD_API_KEY: ${{ secrets.DD_API_KEY }}
         run: |
           set -e
-          cd /opt/apps/web-perf-lab
+          cd /opt/apps/web-performance-lab/web-perf-lab
           git fetch origin main
           git checkout main
           git reset --hard origin/main
