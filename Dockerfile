@@ -5,6 +5,7 @@ COPY package.json package-lock.json ./
 RUN npm ci --ignore-scripts
 COPY . .
 # Next.js intègre les variables publiques au build.
+ARG NEXT_PUBLIC_API_BASE_URL
 ARG NEXT_PUBLIC_GTM_ID
 ARG NEXT_PUBLIC_DATADOG_APPLICATION_ID
 ARG NEXT_PUBLIC_DATADOG_CLIENT_TOKEN
