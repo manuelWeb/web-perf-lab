@@ -2,7 +2,7 @@
 
 ## Déploiement manuel
 
-Préparer sur le serveur `/opt/apps/web-perf-lab/.env` avec
+Préparer sur le serveur `/opt/apps/web-performance-lab/web-perf-lab/.env` avec
 `NEXT_PUBLIC_GTM_ID=GTM-WHDFW9CD` pour activer GTM. Ce fichier non versionné
 est lu par Compose pour alimenter le build ; il n'est pas copié dans l'image.
 Le déploiement automatique ci-dessous utilise le même fichier du serveur.
@@ -25,7 +25,7 @@ Depuis le dossier du projet sur le serveur, construire la branche courante puis
 remplacer le conteneur par la nouvelle image :
 
 ```bash
-cd /opt/apps/web-perf-lab
+cd /opt/apps/web-performance-lab/web-perf-lab
 docker compose build && docker compose up -d --wait
 ```
 
@@ -59,7 +59,7 @@ qu'aucun code non fusionné ne soit livré.
    directement sur `mini-forum` (`~/actions-runners/web-perf-lab`, service
    systemd `actions.runner.manuelWeb-web-perf-lab.miniforum-web-perf-lab`,
    démarré au boot). Le job tourne donc localement et exécute, dans
-   `/opt/apps/web-perf-lab` : `git fetch`, `git reset --hard origin/main`, puis
+   `/opt/apps/web-performance-lab/web-perf-lab` : `git fetch`, `git reset --hard origin/main`, puis
    `docker compose build && docker compose up -d --wait`.
 4. Le healthcheck du service Compose valide la livraison : si le conteneur ne
    devient jamais `healthy`, le job échoue et le signale.
